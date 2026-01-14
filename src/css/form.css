@@ -1,0 +1,13 @@
+.formHead{
+        width: 3em;
+}
+input{
+    width: 30vw;
+
+}
+button{
+        border-radius: 12px;
+    border: none;
+    padding: 10px;
+    font-size: 1.1em;
+}
