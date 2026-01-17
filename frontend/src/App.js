@@ -2,7 +2,7 @@ import './App.css';
 import About from './pages/About.js';
 import Navbar from './pages/Navbar.js';
 import ItemAdd from './pages/ItemAdd.js';
-import { BrowserRouter as Router, Routes, Route, Link } from "react-router-dom";
+import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import MapBoxMiami from "./pages/MapBoxMiami.js";
 import "mapbox-gl/dist/mapbox-gl.css";
 

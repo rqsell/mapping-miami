@@ -1,6 +1,8 @@
 import React, { useState } from "react";
 import "../css/form.css";
 export default function ItemAdd() {
+    const BACKEND_URL = process.env.REACT_APP_BACKEND_URL || "http://localhost:5000";
+
     const [form, setForm] = useState({
         name: "",
         location: "",
@@ -40,7 +42,7 @@ export default function ItemAdd() {
         };
 
         try {
-            const response = await fetch("http://localhost:5000/add-item", {
+const response = await fetch(`${BACKEND_URL}/add-item`, {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify(payload),
@@ -61,7 +63,7 @@ export default function ItemAdd() {
 
     return (
         <form onSubmit={handleSubmit} style={{    display: "flex", flexDirection: "column", alignItems: "center",    marginTop: "2em"}}>
-            <table style={{ borderCollapse: "collapse", backgroundColor: " #f08c048c;", borderRadius: "24px", backgroundColor: "rgba(243, 24, 0, 0.2)"}}>
+            <table style={{ borderCollapse: "collapse", backgroundColor: " #f08c048c;", borderRadius: "24px"}}>
                 <tbody>
                     <tr>
                         <th className="formHead" style={{ textAlign: "left", padding: 16 }}>Name</th>
