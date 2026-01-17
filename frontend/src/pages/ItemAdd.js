@@ -40,7 +40,7 @@ export default function ItemAdd() {
             description: form.description,
             imageUrl: form.imagePreview,
         };
-
+console.log("Using backend URL:", BACKEND_URL);
         try {
 const response = await fetch(`${BACKEND_URL}/add-item`, {
                 method: "POST",
