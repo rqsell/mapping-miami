@@ -102,21 +102,94 @@ const MapBoxMiami = () => {
     });
 
     // ---------- Popup on click ----------
-    map.on("click", (event) => {
-      const features = map.queryRenderedFeatures(event.point, {
-        layers: ["csvData"],
-      });
-      if (!features.length) return;
+ map.on("click", (event) => {
+  const features = map.queryRenderedFeatures(event.point, {
+    layers: ["csvData"],
+  });
 
-      const feature = features[0];
-      new mapboxgl.Popup({ offset: [0, -15] })
-        .setLngLat(feature.geometry.coordinates)
-        .setHTML(
-          `<h3>${feature.properties.title}</h3>
-           <p>${feature.properties.description}</p>`
-        )
-        .addTo(map);
-    });
+  if (!features.length) return;
+
+  // Group features by coordinates to find duplicates at same location
+  const coords = features[0].geometry.coordinates;
+  const featuresAtLocation = features.filter(f => 
+    f.geometry.coordinates[0] === coords[0] && 
+    f.geometry.coordinates[1] === coords[1]
+  );
+
+  let currentIndex = 0;
+
+  // Function to render popup content
+  const renderPopup = (index) => {
+    const feature = featuresAtLocation[index];
+    const total = featuresAtLocation.length;
+    
+    return `
+      <div style="min-width: 200px;">
+        <h3 style="margin: 0 0 8px 0; font-size: 16px;">${feature.properties.title || 'Untitled'}</h3>
+        <p style="margin: 0 0 12px 0; font-size: 14px;">${feature.properties.description || ''}</p>
+        ${total > 1 ? `
+          <div style="display: flex; justify-content: space-between; align-items: center; border-top: 1px solid #ddd; padding-top: 8px;">
+            <button id="prev-btn" style="
+              background: #007cbf;
+              color: white;
+              border: none;
+              padding: 4px 12px;
+              border-radius: 4px;
+              cursor: pointer;
+              font-size: 14px;
+            ">← Prev</button>
+            <span style="font-size: 12px; color: #666;">${index + 1} of ${total}</span>
+            <button id="next-btn" style="
+              background: #007cbf;
+              color: white;
+              border: none;
+              padding: 4px 12px;
+              border-radius: 4px;
+              cursor: pointer;
+              font-size: 14px;
+            ">Next →</button>
+          </div>
+        ` : ''}
+      </div>
+    `;
+  };
+
+  // Create popup
+  const popup = new mapboxgl.Popup({ 
+    offset: [0, -15],
+    closeButton: true,
+    closeOnClick: false
+  })
+    .setLngLat(coords)
+    .setHTML(renderPopup(currentIndex))
+    .addTo(map);
+
+  // Add event listeners for navigation buttons (if multiple features)
+  if (featuresAtLocation.length > 1) {
+    const addListeners = () => {
+      const prevBtn = document.getElementById('prev-btn');
+      const nextBtn = document.getElementById('next-btn');
+
+      if (prevBtn) {
+        prevBtn.addEventListener('click', () => {
+          currentIndex = (currentIndex - 1 + featuresAtLocation.length) % featuresAtLocation.length;
+          popup.setHTML(renderPopup(currentIndex));
+          addListeners(); // Re-attach listeners after HTML update
+        });
+      }
+
+      if (nextBtn) {
+        nextBtn.addEventListener('click', () => {
+          currentIndex = (currentIndex + 1) % featuresAtLocation.length;
+          popup.setHTML(renderPopup(currentIndex));
+          addListeners(); // Re-attach listeners after HTML update
+        });
+      }
+    };
+
+    addListeners();
+  }
+});
 
     // ---------- Cleanup ----------
     return () => {
