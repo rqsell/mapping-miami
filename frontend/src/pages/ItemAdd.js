@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import "../css/form.css";
+
 export default function ItemAdd() {
     const BACKEND_URL = process.env.REACT_APP_BACKEND_URL || "http://localhost:5000";
 
@@ -7,6 +8,7 @@ export default function ItemAdd() {
         name: "",
         location: "",
         title: "",
+        description: "", // ← Added this
         imageFile: null,
         imagePreview: ""
     });
@@ -32,26 +34,34 @@ export default function ItemAdd() {
     const handleSubmit = async (e) => {
         e.preventDefault();
 
-        // Prepare payload
-        const payload = {
-            name: form.name,
-            location: form.location,
-            title: form.title,
-            description: form.description,
-            imageUrl: form.imagePreview,
-        };
-console.log("Using backend URL:", BACKEND_URL);
+        // Use FormData instead of JSON
+        const formData = new FormData();
+        formData.append('name', form.name);
+        formData.append('location', form.location);
+        formData.append('title', form.title);
+        formData.append('description', form.description);
+        
+        if (form.imageFile) {
+            formData.append('image', form.imageFile);
+        }
+
         try {
-const response = await fetch(`${BACKEND_URL}/add-item`, {
+            const response = await fetch(`${BACKEND_URL}/add-item`, {
                 method: "POST",
-                headers: { "Content-Type": "application/json" },
-                body: JSON.stringify(payload),
+                body: formData, // No Content-Type header needed
             });
 
             const data = await response.json();
             if (data.status === "success") {
                 alert("Item added successfully!");
-                setForm({ name: "", location: "", title: "", imageFile: null, imagePreview: "" });
+                setForm({ 
+                    name: "", 
+                    location: "", 
+                    title: "", 
+                    description: "",
+                    imageFile: null, 
+                    imagePreview: "" 
+                });
             } else {
                 alert("Failed to add item: " + data.message);
             }
@@ -98,7 +108,8 @@ const response = await fetch(`${BACKEND_URL}/add-item`, {
                             />
                         </td>
                     </tr>
-    <tr>
+
+                    <tr>
                         <th  className="formHead" style={{ textAlign: "left", padding: 16 }}>Description</th>
                         <td style={{ padding: 16 }}>
                             <input
@@ -108,6 +119,7 @@ const response = await fetch(`${BACKEND_URL}/add-item`, {
                             />
                         </td>
                     </tr>
+
                     <tr>
                         <th className="formHead" style={{ textAlign: "left", padding: 16 }}>Image</th>
                         <td style={{ padding: 16 }}>
