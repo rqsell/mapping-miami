@@ -127,6 +127,8 @@ const MapBoxMiami = () => {
       <div style="min-width: 200px;">
         <h3 style="margin: 0 0 8px 0; font-size: 16px;">${feature.properties.title || 'Untitled'}</h3>
         <p style="margin: 0 0 12px 0; font-size: 14px;">${feature.properties.description || ''}</p>
+        <img src="${feature.properties.imageUrl}" alt="${feature.properties.name}" style="width: 100%; max-width: 300px; height: auto; border-radius: 8px; margin-top: 12px;">
+
         ${total > 1 ? `
           <div style="display: flex; justify-content: space-between; align-items: center; border-top: 1px solid #ddd; padding-top: 8px;">
             <button id="prev-btn" style="
