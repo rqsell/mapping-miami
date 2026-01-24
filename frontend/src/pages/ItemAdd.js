@@ -170,7 +170,7 @@ const handleSubmit = async (e) => {
                     checked={uploadMethod === "file"}
                     onChange={(e) => setUploadMethod(e.target.value)}
                 />
-                {' '}Upload File
+                {' '}Upload FILE
             </label>
         </div>
 
