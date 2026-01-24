@@ -5,55 +5,71 @@ export default function ItemAdd() {
     const BACKEND_URL = process.env.REACT_APP_BACKEND_URL || "http://localhost:5000";
 
     const [form, setForm] = useState({
-        name: "",
-        location: "",
-        title: "",
-        description: "", 
-        imageUrl: null,
-        imagePreview: ""
-    });
+    name: "",
+    location: "",
+    title: "",
+    description: "",
+    imageUrl: "",
+    imageFile: null,
+    imagePreview: ""
+});
 
-    const handleChange = (e) => {
-        const { name, value } = e.target;
-        setForm((f) => ({ ...f, [name]: value }));
-    };
+const [uploadMethod, setUploadMethod] = useState("url"); // "url" or "file"
 
-    const handleImageChange = (e) => {
-        const file = e.target.files && e.target.files[0];
-        if (!file) {
-            setForm((f) => ({ ...f, imageUrl: null, imagePreview: "" }));
-            return;
-        }
-        const reader = new FileReader();
-        reader.onload = () => {
-            setForm((f) => ({ ...f, imageUrl: file, imagePreview: reader.result }));
-        };
-        reader.readAsDataURL(file);
-    };
+const handleChange = (e) => {
+    const { name, value } = e.target;
+    setForm((f) => ({ ...f, [name]: value }));
+};
 
-   const handleSubmit = async (e) => {
-    e.preventDefault();
-    console.log(form.name);
-        console.log("Location being sent:", form.location); // Add this line
-
-
-    const formData = new FormData();
-    formData.append('name', form.name);
-    formData.append('location', form.location);
-    formData.append('title', form.title);
-    formData.append('description', form.description);
-    
-    if (form.imageUrl) {
-        formData.append('image', form.imageUrl)
+const handleImageChange = (e) => {
+    const file = e.target.files && e.target.files[0];
+    if (!file) {
+        setForm((f) => ({ ...f, imageFile: null, imagePreview: "" }));
+        return;
     }
+    const reader = new FileReader();
+    reader.onload = () => {
+        setForm((f) => ({ ...f, imageFile: file, imagePreview: reader.result }));
+    };
+    reader.readAsDataURL(file);
+};
+
+const handleSubmit = async (e) => {
+    e.preventDefault();
 
     try {
-        const response = await fetch(`${BACKEND_URL}/add-item`, {
-            method: "POST",
-            body: formData,
-        });
+        let response;
+        
+        if (uploadMethod === "file" && form.imageFile) {
+            // Upload file using FormData
+            const formData = new FormData();
+            formData.append('name', form.name);
+            formData.append('location', form.location);
+            formData.append('title', form.title);
+            formData.append('description', form.description);
+            formData.append('image', form.imageFile);
 
-        // Check if response is OK before parsing JSON
+            response = await fetch(`${BACKEND_URL}/add-item`, {
+                method: "POST",
+                body: formData,
+            });
+        } else {
+            // Send URL as JSON
+            response = await fetch(`${BACKEND_URL}/add-item`, {
+                method: "POST",
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    name: form.name,
+                    location: form.location,
+                    title: form.title,
+                    description: form.description,
+                    imageUrl: form.imageUrl
+                }),
+            });
+        }
+
         if (!response.ok) {
             const text = await response.text();
             console.error('Server response:', text);
@@ -69,8 +85,9 @@ export default function ItemAdd() {
                 location: "", 
                 title: "", 
                 description: "",
-                imageUrl: null, 
-                imagePreview: "" 
+                imageUrl: "",
+                imageFile: null,
+                imagePreview: ""
             });
         } else {
             alert("Failed to add item: " + data.message);
@@ -131,20 +148,70 @@ export default function ItemAdd() {
                     </tr>
 
                     <tr>
-                        <th className="formHead" style={{ textAlign: "left", padding: 16 }}>Image</th>
-                        <td style={{ padding: 16 }}>
-                            <input type="file" accept="image/*" onChange={handleImageChange} />
-                            {form.imagePreview && (
-                                <div style={{ marginTop: 16 }}>
-                                    <img
-                                        src={form.imagePreview}
-                                        alt="preview"
-                                        style={{ maxWidth: "150px", maxHeight: "150px", display: "block" }}
-                                    />
-                                </div>
-                            )}
-                        </td>
-                    </tr>
+    <th className="formHead" style={{ textAlign: "left", padding: 16 }}>Image</th>
+    <td style={{ padding: 16 }}>
+        {/* Toggle between URL and File upload */}
+        <div style={{ marginBottom: 12 }}>
+            <label style={{ marginRight: 16 }}>
+                <input 
+                    type="radio" 
+                    name="uploadMethod" 
+                    value="url"
+                    checked={uploadMethod === "url"}
+                    onChange={(e) => setUploadMethod(e.target.value)}
+                />
+                {' '}Image URL
+            </label>
+            <label>
+                <input 
+                    type="radio" 
+                    name="uploadMethod" 
+                    value="file"
+                    checked={uploadMethod === "file"}
+                    onChange={(e) => setUploadMethod(e.target.value)}
+                />
+                {' '}Upload File
+            </label>
+        </div>
+
+        {/* Show URL input or File input based on selection */}
+        {uploadMethod === "url" ? (
+            <div>
+                <input
+                    name="imageUrl"
+                    type="url"
+                    value={form.imageUrl}
+                    onChange={handleChange}
+                    placeholder="https://example.com/image.jpg"
+                    style={{ width: '100%' }}
+                />
+                {form.imageUrl && (
+                    <div style={{ marginTop: 16 }}>
+                        <img
+                            src={form.imageUrl}
+                            alt="preview"
+                            style={{ maxWidth: "150px", maxHeight: "150px", display: "block" }}
+                            onError={(e) => { e.target.style.display = 'none'; }}
+                        />
+                    </div>
+                )}
+            </div>
+        ) : (
+            <div>
+                <input type="file" accept="image/*" onChange={handleImageChange} />
+                {form.imagePreview && (
+                    <div style={{ marginTop: 16 }}>
+                        <img
+                            src={form.imagePreview}
+                            alt="preview"
+                            style={{ maxWidth: "150px", maxHeight: "150px", display: "block" }}
+                        />
+                    </div>
+                )}
+            </div>
+        )}
+    </td>
+</tr>
 
                     <tr>
                         <td colSpan="2" style={{ padding: 16, textAlign: "center" }}>
