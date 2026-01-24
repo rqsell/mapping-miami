@@ -56,7 +56,42 @@ const keys = JSON.parse(decoded);
 const auth = new google.auth.GoogleAuth({
   credentials: keys,
   scopes: ["https://www.googleapis.com/auth/spreadsheets"],
+      "https://www.googleapis.com/auth/drive.file"  // for image file
+
+  
 });
+//image to drive folder and get link
+async function uploadToDrive(file, auth) {
+  const drive = google.drive({ version: 'v3', auth });
+  
+  const fileMetadata = {
+    name: file.originalname,
+    parents: ['root'] // or specify a folder ID
+  };
+  
+  const media = {
+    mimeType: file.mimetype,
+    body: require('stream').Readable.from(file.buffer)
+  };
+  
+  const driveFile = await drive.files.create({
+    requestBody: fileMetadata,
+    media: media,
+    fields: 'id, webViewLink, webContentLink'
+  });
+  
+  // Make file publicly accessible
+  await drive.permissions.create({
+    fileId: driveFile.data.id,
+    requestBody: {
+      role: 'reader',
+      type: 'anyone'
+    }
+  });
+  
+  // Return a direct image URL
+  return `https://drive.google.com/uc?export=view&id=${driveFile.data.id}`;
+}
 
 const SPREADSHEET_ID = process.env.SPREADSHEET_ID;
 
@@ -133,8 +168,16 @@ app.post("/add-item", upload.single('image'), async (req, res) => {
     console.log("req.file:", req.file);
     console.log("===================");
     
-
     const { name, location, title, imageUrl, description } = req.body;
+
+    // ✅ Handle file upload to Google Drive
+    let finalImageUrl = imageUrl || "";
+    
+    if (req.file) {
+      const client = await auth.getClient();
+      finalImageUrl = await uploadToDrive(req.file, client);
+      console.log("✅ File uploaded to Drive:", finalImageUrl);
+    }
 
     let latitude = null;
     let longitude = null;
@@ -149,24 +192,14 @@ app.post("/add-item", upload.single('image'), async (req, res) => {
       }
     }
 
-    // DEBUG: check types before sending to Sheets
-    console.log({
-      latitude,
-      longitude,
-      latType: typeof latitude,
-      lngType: typeof longitude
-    });
-
     const client = await auth.getClient();
     const sheets = google.sheets({ version: "v4", auth: client });
 
-    // Get sheetId dynamically
     const spreadsheet = await sheets.spreadsheets.get({ spreadsheetId: SPREADSHEET_ID });
     const sheet = spreadsheet.data.sheets.find(s => s.properties.title === "miami-data");
     const sheetId = sheet.properties.sheetId;
 
-    // Append row using appendCells with numberValue
-    const response = await sheets.spreadsheets.batchUpdate({
+    await sheets.spreadsheets.batchUpdate({
       spreadsheetId: SPREADSHEET_ID,
       requestBody: {
         requests: [
@@ -180,7 +213,7 @@ app.post("/add-item", upload.single('image'), async (req, res) => {
                     { userEnteredValue: { stringValue: title || "" } },
                     { userEnteredValue: { numberValue: longitude || 0 } },
                     { userEnteredValue: { numberValue: latitude || 0 } },
-                    { userEnteredValue: { stringValue: imageUrl || "" } },
+                    { userEnteredValue: { stringValue: finalImageUrl } }, // ✅ Drive URL
                     { userEnteredValue: { stringValue: description || "" } },
                   ],
                 },
@@ -192,7 +225,6 @@ app.post("/add-item", upload.single('image'), async (req, res) => {
       },
     });
 
-    console.log("Sheets append OK:", response.data);
     res.status(200).json({ status: "success" });
 
   } catch (err) {
