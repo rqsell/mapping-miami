@@ -37,6 +37,7 @@ const MapBoxMiami = () => {
 
               const title = (keys.title || keys.name || "").trim();
               const description = (keys.description || keys.notes || "").trim();
+              const imageUrl = (keys.imageurl || keys.image || "").trim(); // Add this line
 
               const lat = cleanNumber(keys.latitude || keys.lat || "");
               const lng = cleanNumber(keys.longitude || keys.lon || keys.lng || "");
@@ -44,7 +45,7 @@ const MapBoxMiami = () => {
               return {
                 type: "Feature",
                 geometry: { type: "Point", coordinates: [lng, lat] },
-                properties: { title, description },
+                properties: { title, description, imageUrl },
               };
             })
             .filter(
