@@ -9,7 +9,7 @@ export default function ItemAdd() {
         location: "",
         title: "",
         description: "", 
-        imageFile: null,
+        imageUrl: null,
         imagePreview: ""
     });
 
@@ -21,12 +21,12 @@ export default function ItemAdd() {
     const handleImageChange = (e) => {
         const file = e.target.files && e.target.files[0];
         if (!file) {
-            setForm((f) => ({ ...f, imageFile: null, imagePreview: "" }));
+            setForm((f) => ({ ...f, imageUrl: null, imagePreview: "" }));
             return;
         }
         const reader = new FileReader();
         reader.onload = () => {
-            setForm((f) => ({ ...f, imageFile: file, imagePreview: reader.result }));
+            setForm((f) => ({ ...f, imageUrl: file, imagePreview: reader.result }));
         };
         reader.readAsDataURL(file);
     };
@@ -34,6 +34,8 @@ export default function ItemAdd() {
    const handleSubmit = async (e) => {
     e.preventDefault();
     console.log(form.name);
+        console.log("Location being sent:", form.location); // Add this line
+
 
     const formData = new FormData();
     formData.append('name', form.name);
@@ -41,8 +43,8 @@ export default function ItemAdd() {
     formData.append('title', form.title);
     formData.append('description', form.description);
     
-    if (form.imageFile) {
-        formData.append('image', form.imageFile);
+    if (form.imageUrl) {
+        formData.append('image', form.imageUrl)
     }
 
     try {
@@ -67,7 +69,7 @@ export default function ItemAdd() {
                 location: "", 
                 title: "", 
                 description: "",
-                imageFile: null, 
+                imageUrl: null, 
                 imagePreview: "" 
             });
         } else {
