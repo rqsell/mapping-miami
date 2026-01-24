@@ -6,17 +6,38 @@ const { google } = require("googleapis");
 const fetch = require("node-fetch"); // v2
 
 const app = express();
+const multer = require('multer');
 
-// ==============================
-// ✅ CORS
-// ==============================
-const FRONTEND_URL = process.env.FRONTEND_URL || "http://localhost:3000";
-app.use(cors({ origin: FRONTEND_URL }));
+// Configure multer
+const upload = multer({ 
+  storage: multer.memoryStorage(),
+  limits: { fileSize: 50 * 1024 * 1024 } // 50MB
+});
+// for larger image sizes
+app.use(express.json({ limit: '50mb' }));
+app.use(express.urlencoded({ limit: '50mb', extended: true }));
+//CORS
+app.use(cors({ 
+  origin: function(origin, callback) {
+    // Allow requests with no origin (like mobile apps or curl)
+    if (!origin) return callback(null, true);
+    
+    // Allow localhost and any Vercel URL
+    if (
+      origin === 'http://localhost:3000' ||
+      origin.includes('vercel.app') ||
+      origin === process.env.FRONTEND_URL
+    ) {
+      callback(null, true);
+    } else {
+      callback(new Error('Not allowed by CORS'));
+    }
+  },
+  credentials: true
+}));
 app.use(bodyParser.json());
 
-// ==============================
-// ✅ Validate env
-// ==============================
+//Validate ENV
 if (!process.env.GOOGLE_SERVICE_ACCOUNT_JSON_BASE64) {
   throw new Error("Missing GOOGLE_SERVICE_ACCOUNT_JSON_BASE64");
 }
@@ -24,18 +45,14 @@ if (!process.env.SPREADSHEET_ID) {
   throw new Error("Missing SPREADSHEET_ID");
 }
 
-// ==============================
-// ✅ Decode service account
-// ==============================
+//base64 decode
 const decoded = Buffer.from(
   process.env.GOOGLE_SERVICE_ACCOUNT_JSON_BASE64,
   "base64"
 ).toString("utf8");
 const keys = JSON.parse(decoded);
 
-// ==============================
-// ✅ Google Auth
-// ==============================
+//google auth for spreadsheets
 const auth = new google.auth.GoogleAuth({
   credentials: keys,
   scopes: ["https://www.googleapis.com/auth/spreadsheets"],
@@ -43,9 +60,7 @@ const auth = new google.auth.GoogleAuth({
 
 const SPREADSHEET_ID = process.env.SPREADSHEET_ID;
 
-// ==============================
-// ✅ Geocoding
-// ==============================
+//geocoding for lng/lat
 async function geocodeAddress(address) {
   const url = `https://nominatim.openstreetmap.org/search?q=${encodeURIComponent(
     address
@@ -67,9 +82,7 @@ async function geocodeAddress(address) {
   };
 }
 
-// ==============================
-// 🔥 Force number formatting on columns
-// ==============================
+//columns formating to avoid errors
 async function forceNumberColumns(sheets, sheetId) {
   await sheets.spreadsheets.batchUpdate({
     spreadsheetId: SPREADSHEET_ID,
@@ -98,9 +111,7 @@ async function forceNumberColumns(sheets, sheetId) {
   });
 }
 
-// ==============================
-// 🚀 INIT: force number format once
-// ==============================
+//number formating force
 (async () => {
   const client = await auth.getClient();
   const sheets = google.sheets({ version: "v4", auth: client });
@@ -114,11 +125,15 @@ async function forceNumberColumns(sheets, sheetId) {
   console.log("✅ Latitude / Longitude columns forced to NUMBER");
 })();
 
-// ==============================
-// ✅ POST endpoint
-// ==============================
-app.post("/add-item", async (req, res) => {
+//post end
+app.post("/add-item", upload.single('image'), async (req, res) => {
   try {
+    console.log("=== RECEIVED DATA ===");
+    console.log("req.body:", req.body);
+    console.log("req.file:", req.file);
+    console.log("===================");
+    
+
     const { name, location, title, imageUrl, description } = req.body;
 
     let latitude = null;
@@ -189,8 +204,6 @@ app.post("/add-item", async (req, res) => {
   }
 });
 
-// ==============================
-// ✅ Start server
-// ==============================
+//start server
 const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => console.log(`🚀 Server running on port ${PORT}`));
