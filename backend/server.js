@@ -55,9 +55,9 @@ const keys = JSON.parse(decoded);
 //google auth for spreadsheets
 const auth = new google.auth.GoogleAuth({
   credentials: keys,
-  scopes: ["https://www.googleapis.com/auth/spreadsheets"],
+  scopes: ["https://www.googleapis.com/auth/spreadsheets",
       "https://www.googleapis.com/auth/drive.file"  // for image file
-
+]
   
 });
 //image to drive folder and get link
