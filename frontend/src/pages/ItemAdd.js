@@ -8,75 +8,50 @@ export default function ItemAdd() {
         name: "",
         location: "",
         title: "",
-        description: "", // ← Added this
+        description: "", 
         imageFile: null,
         imagePreview: ""
     });
 
-    const handleChange = (e) => {
-        const { name, value } = e.target;
-        setForm((f) => ({ ...f, [name]: value }));
-    };
+   const handleSubmit = async (e) => {
+        e.preventDefault();
 
-    const handleImageChange = (e) => {
-        const file = e.target.files && e.target.files[0];
-        if (!file) {
-            setForm((f) => ({ ...f, imageFile: null, imagePreview: "" }));
-            return;
-        }
-        const reader = new FileReader();
-        reader.onload = () => {
-            setForm((f) => ({ ...f, imageFile: file, imagePreview: reader.result }));
-        };
-        reader.readAsDataURL(file);
-    };
-
-    const handleSubmit = async (e) => {
-    e.preventDefault();
-
-    const formData = new FormData();
-    formData.append('name', form.name);
-    formData.append('location', form.location);
-    formData.append('title', form.title);
-    formData.append('description', form.description);
-    
-    if (form.imageFile) {
-        formData.append('image', form.imageFile);
-    }
-
-    try {
-        const response = await fetch(`${BACKEND_URL}/add-item`, {
-            method: "POST",
-            body: formData,
-        });
-
-        // Check if response is OK before parsing JSON
-        if (!response.ok) {
-            const text = await response.text();
-            console.error('Server response:', text);
-            throw new Error(`Server error: ${response.status} ${response.statusText}`);
-        }
-
-        const data = await response.json();
+        // Use FormData instead of JSON
+        const formData = new FormData();
+        formData.append('name', form.name);
+        formData.append('location', form.location);
+        formData.append('title', form.title);
+        formData.append('description', form.description);
         
-        if (data.status === "success") {
-            alert("Item added successfully!");
-            setForm({ 
-                name: "", 
-                location: "", 
-                title: "", 
-                description: "",
-                imageFile: null, 
-                imagePreview: "" 
-            });
-        } else {
-            alert("Failed to add item: " + data.message);
+        if (form.imageFile) {
+            formData.append('image', form.imageFile);
         }
-    } catch (err) {
-        console.error(err);
-        alert("Error submitting form: " + err.message);
-    }
-};
+
+        try {
+            const response = await fetch(`${BACKEND_URL}/add-item`, {
+                method: "POST",
+                body: formData, // No Content-Type header needed
+            });
+
+            const data = await response.json();
+            if (data.status === "success") {
+                alert("Item added successfully!");
+                setForm({ 
+                    name: "", 
+                    location: "", 
+                    title: "", 
+                    description: "",
+                    imageFile: null, 
+                    imagePreview: "" 
+                });
+            } else {
+                alert("Failed to add item: " + data.message);
+            }
+        } catch (err) {
+            console.error(err);
+            alert("Error submitting form: " + err.message);
+        }
+    };
 
     return (
         <form onSubmit={handleSubmit} style={{    display: "flex", flexDirection: "column", alignItems: "center",    marginTop: "2em"}}>
