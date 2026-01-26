@@ -62,6 +62,8 @@ const handleSubmit = async (e) => {
             */
           // else {
             // Send URL as JSON
+                        console.log(form.workshopLocation);
+
             response = await fetch(`${BACKEND_URL}/add-item`, {
                 method: "POST",
                 headers: {
@@ -79,7 +81,6 @@ const handleSubmit = async (e) => {
        // }
 
         if (!response.ok) {
-            console.log(form.workshopLocation);
             const text = await response.text();
             console.error('Server response:', text);
             throw new Error(`Server error: ${response.status} ${response.statusText}`);
