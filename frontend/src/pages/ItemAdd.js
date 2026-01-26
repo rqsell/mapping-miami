@@ -5,6 +5,7 @@ export default function ItemAdd() {
     const BACKEND_URL = process.env.REACT_APP_BACKEND_URL || "http://localhost:5000";
 
     const [form, setForm] = useState({
+    workshopLocation: "",
     name: "",
     location: "",
     title: "",
@@ -13,14 +14,15 @@ export default function ItemAdd() {
     imageFile: null,
     imagePreview: ""
 });
-
-const [uploadMethod, setUploadMethod] = useState("url"); // "url" or "file"
+//Commenting out file upload for 1/31 test
+//const [uploadMethod, setUploadMethod] = useState("url"); // "url" or "file"
 
 const handleChange = (e) => {
     const { name, value } = e.target;
     setForm((f) => ({ ...f, [name]: value }));
 };
-
+//Commenting out file upload for 1/31 test
+{/*
 const handleImageChange = (e) => {
     const file = e.target.files && e.target.files[0];
     if (!file) {
@@ -33,16 +35,19 @@ const handleImageChange = (e) => {
     };
     reader.readAsDataURL(file);
 };
+*/}
 
 const handleSubmit = async (e) => {
     e.preventDefault();
 
     try {
         let response;
+        /* Commenting out file upload for 1/31 test
         
         if (uploadMethod === "file" && form.imageFile) {
             // Upload file using FormData
             const formData = new FormData();
+            formData.append('workshopLocation', form.workshopLocation);
             formData.append('name', form.name);
             formData.append('location', form.location);
             formData.append('title', form.title);
@@ -53,7 +58,9 @@ const handleSubmit = async (e) => {
                 method: "POST",
                 body: formData,
             });
-        } else {
+        } 
+            */
+          // else {
             // Send URL as JSON
             response = await fetch(`${BACKEND_URL}/add-item`, {
                 method: "POST",
@@ -61,6 +68,7 @@ const handleSubmit = async (e) => {
                     'Content-Type': 'application/json',
                 },
                 body: JSON.stringify({
+                    workshopLocation: form.workshopLocation,
                     name: form.name,
                     location: form.location,
                     title: form.title,
@@ -68,7 +76,7 @@ const handleSubmit = async (e) => {
                     imageUrl: form.imageUrl
                 }),
             });
-        }
+       // }
 
         if (!response.ok) {
             const text = await response.text();
@@ -81,6 +89,7 @@ const handleSubmit = async (e) => {
         if (data.status === "success") {
             alert("Item added successfully!");
             setForm({ 
+                workshopLocation: "",
                 name: "", 
                 location: "", 
                 title: "", 
@@ -102,6 +111,16 @@ const handleSubmit = async (e) => {
         <form onSubmit={handleSubmit} style={{    display: "flex", flexDirection: "column", alignItems: "center",    marginTop: "2em"}}>
             <table style={{ borderCollapse: "collapse", backgroundColor: " #f08c048c;", borderRadius: "24px"}}>
                 <tbody>
+                          <tr>
+                        <th className="formHead" style={{ textAlign: "left", padding: 16 }}>Workshop Location </th>
+                        <td style={{ padding: 16 }}>
+                          
+                             <select name="workshopLocation" value={form.workshopLocation} onChange={handleChange} style={{ marginLeft: "16px" }}>
+          <option value="mainBranch">Main Branch 1/31</option>
+          
+        </select>
+                        </td>
+                    </tr>
                     <tr>
                         <th className="formHead" style={{ textAlign: "left", padding: 16 }}>Name</th>
                         <td style={{ padding: 16 }}>
@@ -150,9 +169,11 @@ const handleSubmit = async (e) => {
                     <tr>
     <th className="formHead" style={{ textAlign: "left", padding: 16 }}>Image</th>
     <td style={{ padding: 16 }}>
-        {/* Toggle between URL and File upload */}
+        {/* Toggle between URL and File upload, But commenting out for 1/31 test */}
+         {/*
         <div style={{ marginBottom: 12 }}>
-            <label style={{ marginRight: 16 }}>
+           
+            }<label style={{ marginRight: 16 }}>
                 <input 
                     type="radio" 
                     name="uploadMethod" 
@@ -172,11 +193,10 @@ const handleSubmit = async (e) => {
                 />
                 {' '}Upload FILE
             </label>
+         
         </div>
-
-        {/* Show URL input or File input based on selection */}
-        {uploadMethod === "url" ? (
-            <div>
+   */}
+       <div>
                 <input
                     name="imageUrl"
                     type="url"
@@ -196,20 +216,7 @@ const handleSubmit = async (e) => {
                     </div>
                 )}
             </div>
-        ) : (
-            <div>
-                <input type="file" accept="image/*" onChange={handleImageChange} />
-                {form.imagePreview && (
-                    <div style={{ marginTop: 16 }}>
-                        <img
-                            src={form.imagePreview}
-                            alt="preview"
-                            style={{ maxWidth: "150px", maxHeight: "150px", display: "block" }}
-                        />
-                    </div>
-                )}
-            </div>
-        )}
+        
     </td>
 </tr>
 

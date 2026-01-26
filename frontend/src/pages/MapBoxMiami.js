@@ -45,7 +45,7 @@ const MapBoxMiami = () => {
               return {
                 type: "Feature",
                 geometry: { type: "Point", coordinates: [lng, lat] },
-                properties: { title, description, imageUrl },
+                properties: { title, description, imageUrl, workshopLocation: keys.workshoplocation || ""},
               };
             })
             .filter(
@@ -128,6 +128,8 @@ const MapBoxMiami = () => {
       <div style="min-width: 200px;">
         <h3 style="margin: 0 0 8px 0; font-size: 16px;">${feature.properties.title || 'Untitled'}</h3>
         <p style="margin: 0 0 12px 0; font-size: 14px;">${feature.properties.description || ''}</p>
+         <p style="margin: 0 0 12px 0; font-size: 14px;">${feature.properties.workshopLocation || ''}</p>
+
         <img src="${feature.properties.imageUrl}" alt="${feature.properties.name}" style="width: 100%; max-width: 300px; height: auto; border-radius: 8px; margin-top: 12px;">
 
         ${total > 1 ? `
