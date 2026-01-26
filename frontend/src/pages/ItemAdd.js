@@ -21,6 +21,7 @@ const handleChange = (e) => {
     const { name, value } = e.target;
     setForm((f) => ({ ...f, [name]: value }));
 };
+
 //Commenting out file upload for 1/31 test
 /*
 const handleImageChange = (e) => {
@@ -62,7 +63,7 @@ const handleSubmit = async (e) => {
             */
           // else {
             // Send URL as JSON
-                        console.log(form.workshopLocation);
+                        console.log('workshop'+form.workshopLocation)
 
             response = await fetch(`${BACKEND_URL}/add-item`, {
                 method: "POST",
@@ -91,7 +92,7 @@ const handleSubmit = async (e) => {
         if (data.status === "success") {
             alert("Item added successfully!");
             setForm({ 
-                workshopLocation: "",
+                workshopLocation: "Main Branch 1/31/26",
                 name: "", 
                 location: "", 
                 title: "", 
@@ -116,11 +117,12 @@ const handleSubmit = async (e) => {
                           <tr>
                         <th className="formHead" style={{ textAlign: "left", padding: 16 }}>Workshop Location </th>
                         <td style={{ padding: 16 }}>
-                          
-                             <select name="workshopLocation" value={form.workshopLocation} onChange={handleChange} style={{ marginLeft: "16px" }} required>
-          <option value="Main Branch 1/31/26">Main Branch 1/31</option>
-          
-        </select>
+                     <option value="">-- Select Location --</option>
+<select name="workshopLocation" value={form.workshopLocation} onChange={handleChange} required>
+    <option value="">-- Select Location --</option>
+    <option value="Main Branch 1/31/26">Main Branch 1/31/26</option>
+    <option value="Other Location">Other Location</option>
+</select>
                         </td>
                     </tr>
                     <tr>
