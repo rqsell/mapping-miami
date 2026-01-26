@@ -121,6 +121,7 @@ const MapBoxMiami = () => {
 
   // Function to render popup content
   const renderPopup = (index) => {
+    console.log(featuresAtLocation[index].properties.workshopLocation);
     const feature = featuresAtLocation[index];
     const total = featuresAtLocation.length;
     
