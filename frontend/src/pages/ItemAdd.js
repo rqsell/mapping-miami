@@ -22,7 +22,7 @@ const handleChange = (e) => {
     setForm((f) => ({ ...f, [name]: value }));
 };
 //Commenting out file upload for 1/31 test
-{/*
+/*
 const handleImageChange = (e) => {
     const file = e.target.files && e.target.files[0];
     if (!file) {
@@ -35,7 +35,7 @@ const handleImageChange = (e) => {
     };
     reader.readAsDataURL(file);
 };
-*/}
+*/
 
 const handleSubmit = async (e) => {
     e.preventDefault();
