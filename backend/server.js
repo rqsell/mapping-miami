@@ -168,7 +168,7 @@ app.post("/add-item", upload.single('image'), async (req, res) => {
     console.log("req.file:", req.file);
     console.log("===================");
     
-    const { name, location, title, imageUrl, description } = req.body;
+    const { name, location, title, imageUrl, description, workshopLocation } = req.body;
 
     // ✅ Handle file upload to Google Drive
     let finalImageUrl = imageUrl || "";
@@ -215,6 +215,7 @@ app.post("/add-item", upload.single('image'), async (req, res) => {
                     { userEnteredValue: { numberValue: latitude || 0 } },
                     { userEnteredValue: { stringValue: finalImageUrl } }, // ✅ Drive URL
                     { userEnteredValue: { stringValue: description || "" } },
+                    { userEnteredValue: { stringValue: workshopLocation || "" } }, 
                   ],
                 },
               ],

@@ -63,7 +63,6 @@ const handleSubmit = async (e) => {
             */
           // else {
             // Send URL as JSON
-                        console.log('workshop'+form.workshopLocation)
 
             response = await fetch(`${BACKEND_URL}/add-item`, {
                 method: "POST",
