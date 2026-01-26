@@ -79,6 +79,7 @@ const handleSubmit = async (e) => {
        // }
 
         if (!response.ok) {
+            console.log(form.workshopLocation);
             const text = await response.text();
             console.error('Server response:', text);
             throw new Error(`Server error: ${response.status} ${response.statusText}`);
@@ -115,8 +116,8 @@ const handleSubmit = async (e) => {
                         <th className="formHead" style={{ textAlign: "left", padding: 16 }}>Workshop Location </th>
                         <td style={{ padding: 16 }}>
                           
-                             <select name="workshopLocation" value={form.workshopLocation} onChange={handleChange} style={{ marginLeft: "16px" }}>
-          <option value="mainBranch">Main Branch 1/31</option>
+                             <select name="workshopLocation" value={form.workshopLocation} onChange={handleChange} style={{ marginLeft: "16px" }} required>
+          <option value="Main Branch 1/31/26">Main Branch 1/31</option>
           
         </select>
                         </td>
