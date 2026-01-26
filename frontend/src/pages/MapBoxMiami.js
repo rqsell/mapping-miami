@@ -127,6 +127,7 @@ const MapBoxMiami = () => {
     return `
       <div style="min-width: 200px;">
         <h3 style="margin: 0 0 8px 0; font-size: 16px;">${feature.properties.title || 'Untitled'}</h3>
+         <p style="margin: 0 0 12px 0; font-size: 14px;">${feature.properties.name || ''}</p>
         <p style="margin: 0 0 12px 0; font-size: 14px;">${feature.properties.description || ''}</p>
          <p style="margin: 0 0 12px 0; font-size: 14px;">${feature.properties.workshopLocation || ''}</p>
 
