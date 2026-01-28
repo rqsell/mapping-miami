@@ -29,8 +29,11 @@ const Navbar = () => {
         <li>
           <Link to="/" onClick={closeMenu}>Home</Link>
         </li>
-        <li>
+          <li>
           <Link to="/about" onClick={closeMenu}>About</Link>
+        </li>
+        <li>
+          <Link to="/map" onClick={closeMenu}>Map</Link>
         </li>
         <li>
           <Link to="/add-item" onClick={closeMenu}>Add Item</Link>

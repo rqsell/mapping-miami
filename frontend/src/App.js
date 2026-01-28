@@ -16,9 +16,8 @@ function App() {
       <div style={{ minHeight: "100vh" }}>
         <Routes>
 
-          <Route path="/" element={<MapBoxMiami />} />
-                 <Route path="/home" element={<Home/>} />
-
+          <Route path="/" element={<Home />} />
+         <Route path="/map" element={<MapBoxMiami />} />
           <Route path="/about" element={<About />} />
           <Route path="/add-item" element={<ItemAdd />} />
         </Routes>
