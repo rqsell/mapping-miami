@@ -16,7 +16,7 @@ const Home = () => {
                 </span>
   <Link to="/map" style={{ textDecoration: "none" }}> <span className="button"><span className="letter">e</span><span className="letter">n</span><span className="letter">t</span><span className="letter">e</span> <span className="letter">r</span>          </span>
 </Link>
-            <span className="project">A PROJECT BY MIRANDA DE GASPERI & BUEN PROVECHO COLLECTIVE WITH SUPPORT FROM 8 80 CITIES & THE KNIGHT FOUNDATION</span>
+            <span className="project"><span>A PROJECT BY MIRANDA DE GASPERI & BUEN PROVECHO COLLECTIVE</span><span>WITH SUPPORT FROM 8 80 CITIES & THE KNIGHT FOUNDATION</span></span>
             <span className="imageBox">
                   <img src={eight80} alt="880" height="60" />
         <img src={bpc} alt="BPC" height="60" />
