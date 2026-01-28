@@ -42,16 +42,24 @@
         color:white;
             font-size: 5em;
     text-align: center;
+        line-height: 1;
+        display:flex;
+        justify-content:center;
+        align-items:center;
+       flex-direction: column;
+
 }
 .button{
     font-family: 'AdvinePixel-Regular', sans-serif;
 color:white;
     font-size: 2em;
+        display: flex;
 
 }
 .project{
         font-family: sans-serif ;
 color:white;
+    margin: 10vh 0;
 }
 .imageBoxImage{
     flex-direction:row;
@@ -59,3 +67,25 @@ color:white;
     justify-content:center;
     align-items:center;
 }
+ .letter {
+            display: inline-block;
+            animation: flash 2.5s infinite;
+        }
+
+        /* Stagger the animation delay for each letter */
+        .letter:nth-child(1) { animation-delay: 0s; }
+        .letter:nth-child(2) { animation-delay: 0.5s; }
+        .letter:nth-child(3) { animation-delay: 1s; }
+        .letter:nth-child(4) { animation-delay: 1.5s; }
+        .letter:nth-child(5) { animation-delay: 2s; }
+
+        @keyframes flash {
+            0%, 20% {
+    color:#e8db72;
+;
+            }
+            25%, 100% {
+                color: #fff;
+                text-shadow: none;
+            }
+        }
