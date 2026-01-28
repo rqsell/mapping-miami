@@ -14,7 +14,7 @@ const Home = () => {
                 <span>MAPPING</span>
                 <span style={{ fontSize: "1.4em" }}>MIAMI</span> 
                 </span>
-  <Link to="/map" > <span className="button"><span className="letter">e</span><span className="letter">n</span><span className="letter">t</span><span className="letter">e</span> <span className="letter">r</span>          </span>
+  <Link to="/map" style={{ textDecoration: "none" }}> <span className="button"><span className="letter">e</span><span className="letter">n</span><span className="letter">t</span><span className="letter">e</span> <span className="letter">r</span>          </span>
 </Link>
             <span className="project">A PROJECT BY MIRANDA DE GASPERI & BUEN PROVECHO COLLECTIVE<br></br>WITH SUPPORT FROM 8 80 CITIES & THE KNIGHT FOUNDATION</span>
             <span className="imageBox">

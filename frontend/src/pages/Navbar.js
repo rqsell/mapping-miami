@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { Link } from "react-router-dom";
+import MapMiami from "../images/mapping-miami-light.png"
 const Navbar = () => {
   const [isOpen, setIsOpen] = useState(false);
 
@@ -15,7 +16,7 @@ const Navbar = () => {
     <nav className="navbar">
       <div className="navbar-brand">
         <Link to="/" onClick={closeMenu}>
-         Miami Map App
+       <img src={MapMiami} style={{width:"15vw"}} alt="Map Miami" />
         </Link>
       </div>
 
