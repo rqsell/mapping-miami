@@ -4,6 +4,12 @@ import "../css/form.css";
 export default function ItemAdd() {
     const BACKEND_URL = process.env.REACT_APP_BACKEND_URL || "http://localhost:5000";
 
+    // Authentication state
+    const [isAuthenticated, setIsAuthenticated] = useState(false);
+    const [password, setPassword] = useState("");  
+    const CORRECT_PASSWORD = process.env.REACT_APP_ADMIN_PASSWORD;
+
+     // form state
     const [form, setForm] = useState({
     workshopLocation: "",
     name: "",
