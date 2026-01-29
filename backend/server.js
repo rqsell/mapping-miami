@@ -95,6 +95,44 @@ async function uploadToDrive(file, auth) {
 
 const SPREADSHEET_ID = process.env.SPREADSHEET_ID;
 
+
+//check if location is already coordinates (lat,lng or lng,lat)
+function parseCoordinates(locationString) {
+  // Remove any extra whitespace
+  const cleaned = locationString.trim();
+  
+  // Match patterns like: "25.7617, -80.1918" or "25.7617,-80.1918"
+  const coordPattern = /^(-?\d+\.?\d*)\s*,\s*(-?\d+\.?\d*)$/;
+  const match = cleaned.match(coordPattern);
+  
+  if (match) {
+    const num1 = parseFloat(match[1]);
+    const num2 = parseFloat(match[2]);
+    
+    // Validate that they're valid coordinate ranges
+    // Latitude: -90 to 90, Longitude: -180 to 180
+    if (Math.abs(num1) <= 90 && Math.abs(num2) <= 180) {
+      // Determine which is lat and which is lng
+      // If first number is in lat range (-90 to 90) and second is in lng range, assume lat,lng
+      if (Math.abs(num1) <= 90 && Math.abs(num2) <= 180) {
+        return {
+          latitude: num1,
+          longitude: num2
+        };
+      }
+    }
+    // Try reverse (lng,lat format)
+    if (Math.abs(num2) <= 90 && Math.abs(num1) <= 180) {
+      return {
+        latitude: num2,
+        longitude: num1
+      };
+    }
+  }
+  
+  return null; // Not valid coordinates
+}
+
 //geocoding for lng/lat
 async function geocodeAddress(address) {
   const url = `https://nominatim.openstreetmap.org/search?q=${encodeURIComponent(
@@ -179,14 +217,27 @@ app.post("/add-item", upload.single('image'), async (req, res) => {
       console.log("✅ File uploaded to Drive:", finalImageUrl);
     }
 
+ 
     let latitude = null;
     let longitude = null;
 
     if (location) {
       try {
-        const coords = await geocodeAddress(location);
-        latitude = coords.latitude;
-        longitude = coords.longitude;
+        // First, check if location is already in coordinate format
+        const coords = parseCoordinates(location);
+        
+        if (coords) {
+          // Location is already coordinates
+          latitude = coords.latitude;
+          longitude = coords.longitude;
+          console.log("✅ Using provided coordinates:", { latitude, longitude });
+        } else {
+          // Location is an address, geocode it
+          const geocodedCoords = await geocodeAddress(location);
+          latitude = geocodedCoords.latitude;
+          longitude = geocodedCoords.longitude;
+          console.log("✅ Geocoded address:", { latitude, longitude });
+        }
       } catch (err) {
         console.error("Geocoding failed:", err.message);
       }
