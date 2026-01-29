@@ -213,7 +213,7 @@ app.post("/add-item", upload.single('image'), async (req, res) => {
                     { userEnteredValue: { stringValue: title || "" } },
                     { userEnteredValue: { numberValue: longitude || 0 } },
                     { userEnteredValue: { numberValue: latitude || 0 } },
-                    { userEnteredValue: { stringValue: finalImageUrl } }, // ✅ Drive URL
+                    { userEnteredValue: { stringValue: finalImageUrl } }, 
                     { userEnteredValue: { stringValue: description || "" } },
                     { userEnteredValue: { stringValue: workshopLocation || "" } }, 
                   ],
