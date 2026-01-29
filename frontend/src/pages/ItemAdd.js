@@ -77,7 +77,7 @@ const handleSubmit = async (e) => {
                 },
                 body: JSON.stringify({
                     workshopLocation: form.workshopLocation,
-                    name: form.name,
+                    name: form.firstName,
                     location: form.location,
                     title: form.title,
                     description: form.description,
@@ -204,7 +204,7 @@ if (!isAuthenticated) {
                         <th className="formHead" style={{ textAlign: "left", padding: 16 }}>Name</th>
                         <td style={{ padding: 16 }}>
                             <input
-                                name="name"
+                                name="firstName"
                                 value={form.firstName}
                                 onChange={handleChange}
                                 required
