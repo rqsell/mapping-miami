@@ -66,7 +66,7 @@ async function uploadToDrive(file, auth) {
   
   const fileMetadata = {
     name: file.originalname,
-    parents: ['root'] // or specify a folder ID
+    parents: ['root'] 
   };
   
   const media = {
