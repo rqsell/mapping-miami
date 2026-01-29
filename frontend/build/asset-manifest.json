@@ -1,15 +1,22 @@
 {
   "files": {
-    "main.css": "/static/css/main.f90bf720.css",
-    "main.js": "/static/js/main.23de45b4.js",
+    "main.css": "/static/css/main.659b81d3.css",
+    "main.js": "/static/js/main.4055923e.js",
     "static/js/453.b9256582.chunk.js": "/static/js/453.b9256582.chunk.js",
+    "static/media/asset-4.jpg": "/static/media/asset-4.e1473fefdc31f9190893.jpg",
+    "static/media/AdvinePixel-Outline.ttf": "/static/media/AdvinePixel-Outline.7924985ccf57996a915b.ttf",
+    "static/media/kecc-white.png": "/static/media/kecc-white.49334019de0626b17195.png",
+    "static/media/mapping-miami-light.png": "/static/media/mapping-miami-light.97055f0b53e22ca038da.png",
+    "static/media/AdvinePixel-Regular.ttf": "/static/media/AdvinePixel-Regular.634e1cb4f15a54d25dc8.ttf",
+    "static/media/bpc-logo.png": "/static/media/bpc-logo.75242aed8f5ae461b701.png",
+    "static/media/880-white-horizontal.png": "/static/media/880-white-horizontal.746d69b922360e159bb7.png",
     "index.html": "/index.html",
-    "main.f90bf720.css.map": "/static/css/main.f90bf720.css.map",
-    "main.23de45b4.js.map": "/static/js/main.23de45b4.js.map",
+    "main.659b81d3.css.map": "/static/css/main.659b81d3.css.map",
+    "main.4055923e.js.map": "/static/js/main.4055923e.js.map",
     "453.b9256582.chunk.js.map": "/static/js/453.b9256582.chunk.js.map"
   },
   "entrypoints": [
-    "static/css/main.f90bf720.css",
-    "static/js/main.23de45b4.js"
+    "static/css/main.659b81d3.css",
+    "static/js/main.4055923e.js"
   ]
 }

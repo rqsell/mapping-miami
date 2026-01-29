@@ -114,6 +114,75 @@ const handleSubmit = async (e) => {
         alert("Error submitting form: " + err.message);
     }
 };
+const handlePasswordSubmit = (e) => {
+    e.preventDefault();
+    if (password === CORRECT_PASSWORD) {
+        setIsAuthenticated(true);
+    } else {
+        alert("Incorrect password");
+        setPassword("");
+    }
+};
+if (!isAuthenticated) { (
+<div style={{
+            position: "fixed",
+            top: 0,
+            left: 0,
+            right: 0,
+            bottom: 0,
+            backgroundColor: "rgba(0, 0, 0, 0.7)",
+            display: "flex",
+            justifyContent: "center",
+            alignItems: "center",
+            zIndex: 1000
+        }}>
+            <div style={{
+                backgroundColor: "white",
+                padding: "2em",
+                borderRadius: "12px",
+                boxShadow: "0 4px 6px rgba(0, 0, 0, 0.1)",
+                minWidth: "300px"
+            }}>
+                <h2 style={{ marginTop: 0, textAlign: "center" }}>Admin Access</h2>
+                <form onSubmit={handlePasswordSubmit}>
+                    <div style={{ marginBottom: "1em" }}>
+                        <label style={{ display: "block", marginBottom: "0.5em" }}>
+                            Enter Password:
+                        </label>
+                        <input
+                            type="password"
+                            value={password}
+                            onChange={(e) => setPassword(e.target.value)}
+                            style={{
+                                width: "100%",
+                                padding: "0.5em",
+                                borderRadius: "4px",
+                                border: "1px solid #ccc"
+                            }}
+                            autoFocus
+                            required
+                        />
+                    </div>
+                    <button 
+                        type="submit"
+                        style={{
+                            width: "100%",
+                            padding: "0.75em",
+                            backgroundColor: "#f08c04",
+                            color: "white",
+                            border: "none",
+                            borderRadius: "4px",
+                            cursor: "pointer",
+                            fontSize: "1em"
+                        }}
+                    >
+                        Submit
+                    </button>
+                </form>
+            </div>
+        </div>
+    );
+}
 
     return (
         <form onSubmit={handleSubmit} style={{    display: "flex", flexDirection: "column", alignItems: "center",    marginTop: "2em"}}>

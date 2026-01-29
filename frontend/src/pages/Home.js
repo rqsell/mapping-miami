@@ -1,5 +1,4 @@
 import   React from "react";
-import asset4 from "../images/asset-4.jpg";
 import bpc from "../images/bpc-logo.png";
 import kecc from "../images/kecc-white.png";
 import eight80 from "../images/880-white-horizontal.png";   
