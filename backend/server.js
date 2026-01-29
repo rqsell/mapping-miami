@@ -98,39 +98,50 @@ const SPREADSHEET_ID = process.env.SPREADSHEET_ID;
 
 //check if location is already coordinates (lat,lng or lng,lat)
 function parseCoordinates(locationString) {
-  // Remove any extra whitespace
   const cleaned = locationString.trim();
   
-  // Match patterns like: "25.7617, -80.1918" or "25.7617,-80.1918"
   const coordPattern = /^(-?\d+\.?\d*)\s*,\s*(-?\d+\.?\d*)$/;
   const match = cleaned.match(coordPattern);
   
-  if (match) {
-    const num1 = parseFloat(match[1]);
-    const num2 = parseFloat(match[2]);
-    
-    // Validate that they're valid coordinate ranges
-    // Latitude: -90 to 90, Longitude: -180 to 180
-    if (Math.abs(num1) <= 90 && Math.abs(num2) <= 180) {
-      // Determine which is lat and which is lng
-      // If first number is in lat range (-90 to 90) and second is in lng range, assume lat,lng
-      if (Math.abs(num1) <= 90 && Math.abs(num2) <= 180) {
-        return {
-          latitude: num1,
-          longitude: num2
-        };
-      }
-    }
-    // Try reverse (lng,lat format)
-    if (Math.abs(num2) <= 90 && Math.abs(num1) <= 180) {
-      return {
-        latitude: num2,
-        longitude: num1
-      };
-    }
+  if (!match) return null;
+  
+  const num1 = parseFloat(match[1]);
+  const num2 = parseFloat(match[2]);
+  
+  if (isNaN(num1) || isNaN(num2)) return null;
+  
+  const isNum1ValidLat = Math.abs(num1) <= 90;
+  const isNum2ValidLat = Math.abs(num2) <= 90;
+  const isNum1ValidLng = Math.abs(num1) <= 180;
+  const isNum2ValidLng = Math.abs(num2) <= 180;
+  
+  // Check if values are out of latitude range (> 90)
+  // This definitively identifies longitude
+  if (!isNum1ValidLat && isNum2ValidLat && isNum1ValidLng) {
+    // num1 is too large for lat, must be lng,lat format
+    return { latitude: num2, longitude: num1 };
   }
   
-  return null; // Not valid coordinates
+  if (isNum1ValidLat && !isNum2ValidLat && isNum2ValidLng) {
+    // num2 is too large for lat, must be lat,lng format
+    return { latitude: num1, longitude: num2 };
+  }
+  
+  // Both could be latitude values (both <= 90)
+  // Use sign heuristic: for USA/Americas, lng is usually negative, lat is positive
+  if (isNum1ValidLat && isNum2ValidLat) {
+    // If one is negative and one is positive, assume negative is longitude
+    if (num1 < 0 && num2 > 0) {
+      return { latitude: num2, longitude: num1 }; // lng,lat format
+    }
+    if (num1 > 0 && num2 < 0) {
+      return { latitude: num1, longitude: num2 }; // lat,lng format
+    }
+    // Both same sign - assume lat,lng by convention
+    return { latitude: num1, longitude: num2 };
+  }
+  
+  return null;
 }
 
 //geocoding for lng/lat
