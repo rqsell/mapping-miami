@@ -45,7 +45,7 @@ const MapBoxMiami = () => {
               return {
                 type: "Feature",
                 geometry: { type: "Point", coordinates: [lng, lat] },
-                properties: { title, description, imageUrl, workshopLocation: keys.workshoplocation || ""},
+                properties: {name, title, description, imageUrl, workshopLocation: keys.workshoplocation || ""},
               };
             })
             .filter(
