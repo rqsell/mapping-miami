@@ -123,7 +123,9 @@ const handlePasswordSubmit = (e) => {
         setPassword("");
     }
 };
-if (!isAuthenticated) { (
+if (!isAuthenticated) { 
+        return (
+
 <div style={{
             position: "fixed",
             top: 0,
