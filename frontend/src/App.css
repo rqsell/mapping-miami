@@ -35,7 +35,7 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 12px 20px;
+    max-height: 14vh;
   position: sticky;
   top: 0;
   z-index: 1000;
@@ -76,12 +76,7 @@
   transition: 0.4s;
 }
 
-/* Navigation links */
-.nav-links {
-  list-style: none;
-  display: flex;
-  gap: 1.5rem;
-}
+
 
 .nav-links li a {
   color: white;
@@ -94,7 +89,6 @@
 }
 
 /* Responsive menu (mobile) */
-@media screen and (max-width: 768px) {
   .hamburger {
     display: flex;
   }
@@ -114,5 +108,5 @@
   .nav-links.open {
     display: flex;
   }
-}
+
 /* Navbar css ends */
