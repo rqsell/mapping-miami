@@ -23,7 +23,7 @@
 .home:before{
     content: ""; 
     background-image : url('../images/asset-4.jpg');
-    opacity:.3;
+    opacity:.1;
     content: "";
     background-size: cover;
     position: absolute;

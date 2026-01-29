@@ -43,7 +43,7 @@
 .navbar:before {
     content: ""; 
     background-image : url('/src/images/asset-4.jpg');
-    opacity:.3;
+    opacity:.1;
     content: "";
     background-size: cover;
     position: absolute;
