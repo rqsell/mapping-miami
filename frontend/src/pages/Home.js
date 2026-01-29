@@ -18,8 +18,8 @@ const Home = () => {
             <span className="project"><span>A PROJECT BY MIRANDA DE GASPERI & BUEN PROVECHO COLLECTIVE</span><span>WITH SUPPORT FROM 8 80 CITIES & THE KNIGHT FOUNDATION</span></span>
             <span className="imageBox">
                   <img src={eight80} alt="880" height="60" />
-        <img src={bpc} alt="BPC" height="60" />
-        <img src={kecc} alt="Knight" height="60" />
+        <img src={bpc} alt="BPC" height="80" />
+        <img src={kecc} alt="Knight" height="80" />
                 </span>
         </div>
     );

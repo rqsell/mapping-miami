@@ -17,8 +17,6 @@
     display: flex;
     flex-direction: column;
     align-items: center;
-
-
 }
 .home:before{
     content: ""; 
@@ -78,6 +76,10 @@ color:white;
 
 
 }}
+.imageBox{
+    display: flex;
+    flex-direction: row;
+    align-items: center;}
 .imageBoxImage{
     flex-direction:row;
     display:flex;

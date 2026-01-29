@@ -191,11 +191,10 @@ if (!isAuthenticated) { (
                           <tr>
                         <th className="formHead" style={{ textAlign: "left", padding: 16 }}>Workshop Location </th>
                         <td style={{ padding: 16 }}>
-                     <option value="">-- Select Location --</option>
 <select name="workshopLocation" value={form.workshopLocation} onChange={handleChange} required>
     <option value="">-- Select Location --</option>
     <option value="Main Branch 1/31/26">Main Branch 1/31/26</option>
-    <option value="Other Location">Other Location</option>
+    <option value="Other Location">Bass Museum Pilot</option>
 </select>
                         </td>
                     </tr>
