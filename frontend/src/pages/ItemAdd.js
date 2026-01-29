@@ -196,7 +196,7 @@ if (!isAuthenticated) {
 <select name="workshopLocation" value={form.workshopLocation} onChange={handleChange} required>
     <option value="">-- Select Location --</option>
     <option value="Main Branch 1/31/26">Main Branch 1/31/26</option>
-    <option value="Other Location">Bass Museum Pilot</option>
+    <option value="Other Location">Bass Museum Pilot (2023)</option>
 </select>
                         </td>
                     </tr>
