@@ -12,7 +12,7 @@ export default function ItemAdd() {
      // form state
     const [form, setForm] = useState({
     workshopLocation: "",
-    name: "",
+    firstName: "",
     location: "",
     title: "",
     description: "",
@@ -205,7 +205,7 @@ if (!isAuthenticated) {
                         <td style={{ padding: 16 }}>
                             <input
                                 name="name"
-                                value={form.name}
+                                value={form.firstName}
                                 onChange={handleChange}
                                 required
                             />
