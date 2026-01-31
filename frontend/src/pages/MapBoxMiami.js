@@ -33,17 +33,15 @@ const MapBoxMiami = () => {
                 Object.entries(r).map(([k, v]) => [k.trim().toLowerCase(), v])
               );
               const firstName = (keys.firstName || keys['name'] || "").trim();
-              const title = (keys.title || keys['name'] || "").trim();  
-              const description = (keys.description || keys.notes || "").trim();
               const imageUrl = (keys.imageurl || keys.image || "").trim(); // Add this line
-
+              const workshopLocation = keys.workshoplocation || "";
               const lat = cleanNumber(keys.latitude || keys.lat || "");
               const lng = cleanNumber(keys.longitude || keys.lon || keys.lng || "");
 
               return {
                 type: "Feature",
                 geometry: { type: "Point", coordinates: [lng, lat] },
-                properties: {firstName, title, description, imageUrl, workshopLocation: keys.workshoplocation || ""},
+                properties: {firstName, workshopLocation, imageUrl, },
               };
             })
             .filter(
