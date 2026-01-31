@@ -24,3 +24,13 @@
 .mainText{
         font-family: 'IBM Plex Monno', monospace;
         color:white;}
+        @media (max-width: 768px) {
+          .aboutText {
+            padding: 0 2%;
+          }
+        }
+          @media (max-width: 768px) {
+          .aboutText {
+            padding: 0 20%;
+          }
+        }

@@ -8,7 +8,7 @@ import "../css/about.css";
 const About = () => {
   return (
     <div style={{ padding: "2rem", margin: "0 auto", backgroundColor: "#C6BB99", color: "white", fontFamily: 'IBM Plex Mono, monospace', alignSelf: "center" }}>
-      <p style={{    display: "flex", flexDirection: "column", padding:"0 20%" }}>
+      <p className="aboutText" style={{    display: "flex", flexDirection: "column"}}>
         <span style={{backgroundColor:"#86A2AA", padding:"1em",  borderRadius: "24px",  textAlign: "center"}}>Mapping Miami is a participatory digital archiving project. Centered on lived experience and celebrating Miamians’ own perspectives, Mapping Miami uses art and technology to preserve the stories of a rapidly changing city. </span>
 
 <span style={{ fontFamily: 'AdvinePixel-Regular',  fontSize: '2.5em'}}>Miami is changing 
