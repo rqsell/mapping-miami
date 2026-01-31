@@ -29,7 +29,7 @@ Visit Buen Provecho Collective's Instagram or website to find the next workshop 
 </span>
 
 <span className="mainText">
-Mapping Miami is a project by Miranda De Gasperi, supported by 8 80 Cities, the Knight Foundation, and Buen Provecho Collective. We are endlessly grateful for the institutional support that has made this project possible, and to the artists and experts that generously helped facilitate workshops and shared their expertise. For more information on each workshop visit <a href="https://buenprovechocollective.com" target="_blank">buenprovechocollective.com. </a>
+Mapping Miami is a project by Miranda De Gasperi, supported by 8 80 Cities, the Knight Foundation, and Buen Provecho Collective. We are endlessly grateful for the institutional support that has made this project possible, and to the artists and experts that generously helped facilitate workshops and shared their expertise. For more information on each workshop visit <a href="https://buenprovechocollective.com" target="_blank" rel="noreferrer">buenprovechocollective.com. </a>
 <br></br>
 <br></br>
 
@@ -54,7 +54,7 @@ BPC is a Miami-based non-profit organization on a mission to make art accessible
 <br></br>
 <br></br>
 
-<a href="https://emergingcitychampions.org/" target="_blank">Learn more about 8 80 Cities and the Knight Foundation’s Emerging City Champions </a>
+<a href="https://emergingcitychampions.org/" target="_blank" rel="noreferrer">Learn more about 8 80 Cities and the Knight Foundation’s Emerging City Champions </a>
 <br></br>
 <br></br>
 
