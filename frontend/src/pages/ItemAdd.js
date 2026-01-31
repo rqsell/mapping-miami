@@ -14,8 +14,6 @@ export default function ItemAdd() {
     workshopLocation: "",
     firstName: "",
     location: "",
-    title: "",
-    description: "",
     imageUrl: "",
     imageFile: null,
     imagePreview: ""
@@ -79,8 +77,6 @@ const handleSubmit = async (e) => {
                     workshopLocation: form.workshopLocation,
                     name: form.firstName,
                     location: form.location,
-                    title: form.title,
-                    description: form.description,
                     imageUrl: form.imageUrl
                 }),
             });
@@ -100,8 +96,6 @@ const handleSubmit = async (e) => {
                 workshopLocation: "Main Branch 1/31/26",
                 name: "", 
                 location: "", 
-                title: "", 
-                description: "",
                 imageUrl: "",
                 imageFile: null,
                 imagePreview: ""
@@ -196,7 +190,7 @@ if (!isAuthenticated) {
 <select name="workshopLocation" value={form.workshopLocation} onChange={handleChange} required>
     <option value="">-- Select Location --</option>
     <option value="Main Branch 1/31/26">Main Branch 1/31/26</option>
-    <option value="Other Location">Bass Museum Pilot (2023)</option>
+    <option value="Bass Museum Pilot (2023)">Bass Museum Pilot (2023)</option>
 </select>
                         </td>
                     </tr>
@@ -223,27 +217,8 @@ if (!isAuthenticated) {
                         </td>
                     </tr>
 
-                    <tr>
-                        <th className="formHead" style={{ textAlign: "left", padding: 16 }}>Title</th>
-                        <td style={{ padding: 16 }}>
-                            <input
-                                name="title"
-                                value={form.title}
-                                onChange={handleChange}
-                            />
-                        </td>
-                    </tr>
+        
 
-                    <tr>
-                        <th  className="formHead" style={{ textAlign: "left", padding: 16 }}>Description</th>
-                        <td style={{ padding: 16 }}>
-                            <input
-                                name="description"
-                                value={form.description}
-                                onChange={handleChange}
-                            />
-                        </td>
-                    </tr>
 
                     <tr>
     <th className="formHead" style={{ textAlign: "left", padding: 16 }}>Image</th>
