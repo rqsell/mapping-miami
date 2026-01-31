@@ -179,8 +179,8 @@ async function forceNumberColumns(sheets, sheetId) {
           repeatCell: {
             range: {
               sheetId: sheetId,
-              startColumnIndex: 2, // C = longitude
-              endColumnIndex: 4,   // D = latitude
+              startColumnIndex: 1, // B = longitude (changed from 2)
+              endColumnIndex: 3,   // C = latitude (changed from 4)
             },
             cell: {
               userEnteredFormat: {
@@ -265,31 +265,29 @@ app.post("/add-item", upload.single('image'), async (req, res) => {
     const sheetId = sheet.properties.sheetId;
 
     await sheets.spreadsheets.batchUpdate({
-      spreadsheetId: SPREADSHEET_ID,
-      requestBody: {
-        requests: [
-          {
-            appendCells: {
-              sheetId: sheetId,
-              rows: [
-                {
-                  values: [
-                    { userEnteredValue: { stringValue: firstName || "" } },
-                    { userEnteredValue: { stringValue: title || "" } },
-                    { userEnteredValue: { numberValue: longitude || 0 } },
-                    { userEnteredValue: { numberValue: latitude || 0 } },
-                    { userEnteredValue: { stringValue: finalImageUrl } }, 
-                    { userEnteredValue: { stringValue: description || "" } },
-                    { userEnteredValue: { stringValue: workshopLocation || "" } }, 
-                  ],
-                },
+  spreadsheetId: SPREADSHEET_ID,
+  requestBody: {
+    requests: [
+      {
+        appendCells: {
+          sheetId: sheetId,
+          rows: [
+            {
+              values: [
+                { userEnteredValue: { stringValue: name || "" } },        // A
+                { userEnteredValue: { numberValue: longitude || 0 } },         // B
+                { userEnteredValue: { numberValue: latitude || 0 } },          // C
+                { userEnteredValue: { stringValue: finalImageUrl } },          // D
+                { userEnteredValue: { stringValue: workshopLocation || "" } }, // E
               ],
-              fields: "userEnteredValue",
             },
-          },
-        ],
+          ],
+          fields: "userEnteredValue",
+        },
       },
-    });
+    ],
+  },
+});
 
     res.status(200).json({ status: "success" });
 

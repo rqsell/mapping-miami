@@ -73,12 +73,12 @@ const handleSubmit = async (e) => {
                 headers: {
                     'Content-Type': 'application/json',
                 },
-                body: JSON.stringify({
-                    workshopLocation: form.workshopLocation,
-                    name: form.firstName,
-                    location: form.location,
-                    imageUrl: form.imageUrl
-                }),
+             body: JSON.stringify({
+    workshopLocation: form.workshopLocation,
+    firstName: form.firstName,  // ✅ Sending as 'firstName'
+    location: form.location,
+    imageUrl: form.imageUrl
+}),
             });
        // }
 
