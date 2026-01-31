@@ -1,0 +1,26 @@
+@font-face {
+  font-family: 'AdvinePixel-Regular';
+  src: url('../fonts/AdvinePixel-Regular.ttf') format('truetype');
+  font-weight: normal;
+  font-style: normal;
+}
+@font-face {
+  font-family: 'AdvinePixel-Outline';
+  src: url('../fonts/AdvinePixel-Outline.ttf') format('truetype');
+  font-weight: normal;
+  font-style: normal;
+}
+.imageBox{
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;}
+.imageBoxImage{
+    flex-direction:row;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+}
+.mainText{
+        font-family: 'IBM Plex Monno', monospace;
+        color:white;}
