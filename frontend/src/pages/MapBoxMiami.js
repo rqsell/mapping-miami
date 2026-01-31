@@ -2,9 +2,7 @@ import React, { useEffect, useRef } from "react";
 import mapboxgl from "mapbox-gl";
 import * as d3 from "d3";
 
-mapboxgl.accessToken =
-  "pk.eyJ1IjoicnFzZWxsIiwiYSI6ImNtZGoxd25qYzBpMGQyam9qeXBlcjd5cXAifQ.iXLBlCELLaYma9nfTDCOrg";
-
+mapboxgl.accessToken = process.env.MAP_BOX_ACCESS_TOKEN; 
 const MapBoxMiami = () => {
   const mapContainer = useRef(null);
   const mapRef = useRef(null);
@@ -34,8 +32,8 @@ const MapBoxMiami = () => {
               const keys = Object.fromEntries(
                 Object.entries(r).map(([k, v]) => [k.trim().toLowerCase(), v])
               );
-              const firstName = (keys.firstName || keys.name || "").trim();
-              const title = (keys.title || keys.name || "").trim();
+              const firstName = (keys.firstName || keys['name'] || "").trim();
+              const title = (keys.title || keys['name'] || "").trim();  
               const description = (keys.description || keys.notes || "").trim();
               const imageUrl = (keys.imageurl || keys.image || "").trim(); // Add this line
 
@@ -126,10 +124,8 @@ const MapBoxMiami = () => {
     const total = featuresAtLocation.length;
     
     return `
-      <div style="min-width: 200px;">
-        <h3 style="margin: 0 0 8px 0; font-size: 16px;">${feature.properties.title || 'Untitled'}</h3>
-         <p style="margin: 0 0 12px 0; font-size: 14px;">${feature.properties.firstName || ''}</p>
-        <p style="margin: 0 0 12px 0; font-size: 14px;">${feature.properties.description || ''}</p>
+      <div style="min-width:200px;">
+        <h3 style="margin: 0 0 8px 0; font-size: 16px;">${feature.properties.firstName || ''}</h3>
          <p style="margin: 0 0 12px 0; font-size: 14px;">${feature.properties.workshopLocation || ''}</p>
 
         <img src="${feature.properties.imageUrl}" alt="${feature.properties.firstName}" style="width: 100%; max-width: 300px; height: auto; border-radius: 8px; margin-top: 12px;">

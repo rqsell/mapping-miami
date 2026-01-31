@@ -100,7 +100,7 @@ const SPREADSHEET_ID = process.env.SPREADSHEET_ID;
 function parseCoordinates(locationString) {
   const cleaned = locationString.trim();
   
-  const coordPattern = /^(-?\d+\.?\d*)\s*,\s*(-?\d+\.?\d*)$/;
+const coordPattern = /^\s*(-?\d+\.?\d*)\s*,\s*(-?\d+\.?\d*)\s*$/;
   const match = cleaned.match(coordPattern);
   
   if (!match) return null;
