@@ -34,7 +34,7 @@ const MapBoxMiami = () => {
               );
               const firstName = (keys.firstName || keys['name'] || "").trim();
               const imageUrl = (keys.imageurl || keys.image || "").trim(); // Add this line
-              const workshopLocation = keys.workshoplocation || "";
+              const workshopLocation = keys.workshopLocation|| keys['workshop'] || "";
               const lat = cleanNumber(keys.latitude || keys.lat || "");
               const lng = cleanNumber(keys.longitude || keys.lon || keys.lng || "");
 
