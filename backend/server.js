@@ -22,12 +22,15 @@ app.use(cors({
     // Allow requests with no origin (like mobile apps or curl)
     if (!origin) return callback(null, true);
     
-    // Allow localhost and any Vercel URL
-    if (
-      origin === 'http://localhost:3000' ||
-      origin.includes('vercel.app') ||
-      origin === process.env.FRONTEND_URL
-    ) {
+    const allowedOrigins = [
+      'http://localhost:3000',           // Local development
+      'https://mapping.miami',           // Production domain
+      'http://mapping.miami',            // HTTP version (if needed)
+      process.env.FRONTEND_URL           // Environment variable fallback
+    ];
+    
+    // Allow any Vercel preview deployments
+    if (origin.includes('vercel.app') || allowedOrigins.includes(origin)) {
       callback(null, true);
     } else {
       callback(new Error('Not allowed by CORS'));
