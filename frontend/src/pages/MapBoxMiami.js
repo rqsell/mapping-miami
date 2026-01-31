@@ -2,7 +2,7 @@ import React, { useEffect, useRef } from "react";
 import mapboxgl from "mapbox-gl";
 import * as d3 from "d3";
 
-mapboxgl.accessToken = process.env.MAP_BOX_ACCESS_TOKEN.toString(); 
+mapboxgl.accessToken = process.env.MAP_BOX_ACCESS_TOKEN;; 
 const MapBoxMiami = () => {
   const mapContainer = useRef(null);
   const mapRef = useRef(null);
