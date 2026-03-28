@@ -21,7 +21,6 @@ const ImageModal = ({ image, onClose }) => {
         alignItems: "center", justifyContent: "center",
       }}
     >
-      {/* Modal box — stop clicks from closing */}
       <div
         onClick={(e) => e.stopPropagation()}
         style={{
@@ -32,7 +31,6 @@ const ImageModal = ({ image, onClose }) => {
       >
         <p style={{ margin: 0, fontWeight: 600, fontSize: 15 }}>{image.name}</p>
 
-        {/* Image */}
         <div style={{ overflow: "hidden", borderRadius: 8, maxHeight: "60vh" }}>
           <img
             src={image.url}
@@ -48,14 +46,13 @@ const ImageModal = ({ image, onClose }) => {
           />
         </div>
 
-        {/* Controls */}
         <div style={{ display: "flex", gap: 10, flexWrap: "wrap", justifyContent: "center" }}>
           {[
-            { label: "＋ Zoom In",   action: () => setZoom((z) => Math.min(z + 0.25, 4)) },
-            { label: "－ Zoom Out",  action: () => setZoom((z) => Math.max(z - 0.25, 0.25)) },
-            { label: "↺ Rotate L",  action: () => setRotation((r) => r - 90) },
-            { label: "↻ Rotate R",  action: () => setRotation((r) => r + 90) },
-            { label: "⟳ Reset",     action: () => { setZoom(1); setRotation(0); } },
+            { label: "＋ Zoom In",  action: () => setZoom((z) => Math.min(z + 0.25, 4)) },
+            { label: "－ Zoom Out", action: () => setZoom((z) => Math.max(z - 0.25, 0.25)) },
+            { label: "↺ Rotate L", action: () => setRotation((r) => r - 90) },
+            { label: "↻ Rotate R", action: () => setRotation((r) => r + 90) },
+            { label: "⟳ Reset",    action: () => { setZoom(1); setRotation(0); } },
           ].map(({ label, action }) => (
             <button
               key={label}
@@ -89,9 +86,12 @@ const ImageModal = ({ image, onClose }) => {
 const MapBoxMiami = () => {
   const mapContainer = useRef(null);
   const mapRef = useRef(null);
-  const [modalImage, setModalImage] = useState(null); // { url, name }
+  const [modalImage, setModalImage] = useState(null);
+  const setModalImageRef = useRef(null); // ✅ keep setModalImage fresh inside closure
 
   useEffect(() => {
+    setModalImageRef.current = setModalImage; // ✅ always up to date
+
     const cleanNumber = (val) => {
       if (!val) return NaN;
       return parseFloat(val.toString().trim().replace(/^'/, ""));
@@ -148,17 +148,18 @@ const MapBoxMiami = () => {
 
     const map = mapRef.current;
 
-    // ✅ Delegate clicks on popup images up to the map container
- const handlePopupImageClick = (e) => {
-  if (e.target.tagName === "IMG" && e.target.closest(".mapboxgl-popup")) {
-    e.stopPropagation(); // ✅ prevents map click from also firing
-    setModalImage({
-      url: e.target.src,
-      name: e.target.alt || "",
-    });
-  }
-};
-    mapContainer.current.addEventListener("click", handlePopupImageClick);
+    // ✅ Capture phase — fires BEFORE Mapbox canvas sees the click
+    const handlePopupImageClick = (e) => {
+      if (e.target.tagName === "IMG" && e.target.closest(".mapboxgl-popup")) {
+        e.stopPropagation(); // kills bubble so Mapbox never fires
+        e.preventDefault();
+        setModalImageRef.current({
+          url: e.target.src,
+          name: e.target.alt || "",
+        });
+      }
+    };
+    mapContainer.current.addEventListener("click", handlePopupImageClick, true); // ✅ true = capture
 
     map.on("load", async () => {
       const geojson = await loadCsv();
@@ -194,8 +195,9 @@ const MapBoxMiami = () => {
     });
 
     map.on("click", (event) => {
-        // ✅ Ignore clicks that originated inside the popup
-  if (event.originalEvent.target.closest?.(".mapboxgl-popup")) return;
+      // ✅ Ignore clicks that originated inside the popup
+      if (event.originalEvent.target.closest?.(".mapboxgl-popup")) return;
+
       const features = map.queryRenderedFeatures(event.point, {
         layers: ["csvData"],
       });
@@ -273,7 +275,7 @@ const MapBoxMiami = () => {
     });
 
     return () => {
-      mapContainer.current?.removeEventListener("click", handlePopupImageClick);
+      mapContainer.current?.removeEventListener("click", handlePopupImageClick, true); // ✅ true matches registration
       if (map.__refreshInterval) clearInterval(map.__refreshInterval);
       map.remove();
     };
@@ -285,7 +287,6 @@ const MapBoxMiami = () => {
         ref={mapContainer}
         style={{ position: "absolute", top: 0, bottom: 0, width: "100%" }}
       />
-      {/* ✅ Modal lives outside the map div so React manages it cleanly */}
       <ImageModal image={modalImage} onClose={() => setModalImage(null)} />
     </>
   );
