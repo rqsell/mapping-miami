@@ -176,7 +176,7 @@ const MapBoxMiami = () => {
             "match",
             ["get", "workshopLocation"],
             "Vizcaya Museum and Gardens 3/29/26", "green",
-            "Main Branch 1/31/26",               "purple",
+            "Main Branch 1/31/26",               "yellow",
             "Bass Museum Pilot (2023)",           "orange",
             "#cccccc",
           ],
