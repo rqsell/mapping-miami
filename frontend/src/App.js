@@ -10,10 +10,8 @@ import "mapbox-gl/dist/mapbox-gl.css";
 
 function App() {
   return (
-      <div style={{ height: "100vh", width: "100%" }}>
   <Router>
       <Navbar />
-      <div style={{ minHeight: "100vh" }}>
         <Routes>
 
           <Route path="/" element={<Home />} />
@@ -21,9 +19,9 @@ function App() {
           <Route path="/about" element={<About />} />
           <Route path="/add-item" element={<ItemAdd />} />
         </Routes>
-      </div>
+      
     </Router>
-    </div>
+
    
   );
 }
