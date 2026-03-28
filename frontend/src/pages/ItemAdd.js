@@ -189,6 +189,7 @@ if (!isAuthenticated) {
                         <td style={{ padding: 16 }}>
 <select name="workshopLocation" value={form.workshopLocation} onChange={handleChange} required>
     <option value="">-- Select Location --</option>
+        <option value="Vizcaya Museum and Gardens 3/29/26">Vizcaya Museum and Gardens 3/29/26</option>
     <option value="Main Branch 1/31/26">Main Branch 1/31/26</option>
     <option value="Bass Museum Pilot (2023)">Bass Museum Pilot (2023)</option>
 </select>

@@ -75,12 +75,22 @@ const MapBoxMiami = () => {
 
       // Add source & layer
       map.addSource("csvData", { type: "geojson", data: geojson });
-      map.addLayer({
-        id: "csvData",
-        type: "circle",
-        source: "csvData",
-        paint: { "circle-radius": 5, "circle-color": "purple" },
-      });
+  map.addLayer({
+  id: "csvData",
+  type: "circle",
+  source: "csvData",
+  paint: {
+    "circle-radius": 5,
+    "circle-color": [
+      "match",
+      ["get", "workshopLocation"],
+      "Vizcaya Museum and Gardens 3/29/26", "green",
+      "Main Branch 1/31/26",               "purple",
+      "Bass Museum Pilot (2023)",           "orange",
+      "#cccccc" // fallback color for anything else
+    ],
+  },
+});
 
       // ---------- Auto-refresh every 30s ----------
       const interval = setInterval(async () => {
