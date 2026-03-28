@@ -90,6 +90,7 @@ const MapBoxMiami = () => {
   const setModalImageRef = useRef(null); // ✅ keep setModalImage fresh inside closure
 
   useEffect(() => {
+      const container = mapContainer.current; 
     setModalImageRef.current = setModalImage; // ✅ always up to date
 
     const cleanNumber = (val) => {
@@ -273,12 +274,12 @@ const MapBoxMiami = () => {
         addListeners();
       }
     });
-
-    return () => {
-      mapContainer.current?.removeEventListener("click", handlePopupImageClick, true); // ✅ true matches registration
-      if (map.__refreshInterval) clearInterval(map.__refreshInterval);
-      map.remove();
-    };
+return () => {
+  document.removeEventListener("click", handleOutsideClick, true);
+  container?.removeEventListener("click", handlePopupImageClick, true); // ✅ use local var
+  if (map.__refreshInterval) clearInterval(map.__refreshInterval);
+  map.remove();
+};
   }, []);
 
   return (
