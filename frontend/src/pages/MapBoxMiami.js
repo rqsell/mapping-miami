@@ -86,13 +86,16 @@ const ImageModal = ({ image, onClose }) => {
 const MapBoxMiami = () => {
   const mapContainer = useRef(null);
   const mapRef = useRef(null);
+  const activePopupRef = useRef(null);
   const [modalImage, setModalImage] = useState(null);
-  const setModalImageRef = useRef(null); // ✅ keep setModalImage fresh inside closure
+  const setModalImageRef = useRef(null);
 
   useEffect(() => {
-      const container = mapContainer.current; 
-    setModalImageRef.current = setModalImage; // ✅ always up to date
+    // 1. Capture container ref and setModalImage before anything else
+    const container = mapContainer.current;
+    setModalImageRef.current = setModalImage;
 
+    // 2. Helpers
     const cleanNumber = (val) => {
       if (!val) return NaN;
       return parseFloat(val.toString().trim().replace(/^'/, ""));
@@ -140,8 +143,9 @@ const MapBoxMiami = () => {
       }
     };
 
+    // 3. Initialize map
     mapRef.current = new mapboxgl.Map({
-      container: mapContainer.current,
+      container,
       style: "mapbox://styles/rqsell/cmfe4dvgz007801s4f6srej35/draft",
       center: [-80.1918, 25.7617],
       zoom: 10.7,
@@ -149,10 +153,10 @@ const MapBoxMiami = () => {
 
     const map = mapRef.current;
 
-    // ✅ Capture phase — fires BEFORE Mapbox canvas sees the click
+    // 4. Capture-phase listener for image clicks inside popup
     const handlePopupImageClick = (e) => {
       if (e.target.tagName === "IMG" && e.target.closest(".mapboxgl-popup")) {
-        e.stopPropagation(); // kills bubble so Mapbox never fires
+        e.stopPropagation();
         e.preventDefault();
         setModalImageRef.current({
           url: e.target.src,
@@ -160,8 +164,9 @@ const MapBoxMiami = () => {
         });
       }
     };
-    mapContainer.current.addEventListener("click", handlePopupImageClick, true); // ✅ true = capture
+    container.addEventListener("click", handlePopupImageClick, true);
 
+    // 5. Map load — add source, layer, auto-refresh
     map.on("load", async () => {
       const geojson = await loadCsv();
       if (!geojson) return;
@@ -177,7 +182,7 @@ const MapBoxMiami = () => {
             "match",
             ["get", "workshopLocation"],
             "Vizcaya Museum and Gardens 3/29/26", "green",
-            "Main Branch 1/31/26",               "yellow",
+            "Main Branch 1/31/26",               "purple",
             "Bass Museum Pilot (2023)",           "orange",
             "#cccccc",
           ],
@@ -195,8 +200,8 @@ const MapBoxMiami = () => {
       map.__refreshInterval = interval;
     });
 
+    // 6. Map click — open popup
     map.on("click", (event) => {
-      // ✅ Ignore clicks that originated inside the popup
       if (event.originalEvent.target.closest?.(".mapboxgl-popup")) return;
 
       const features = map.queryRenderedFeatures(event.point, {
@@ -230,7 +235,7 @@ const MapBoxMiami = () => {
             ${
               total > 1
                 ? `<div style="display:flex;justify-content:space-between;
-                               align-items:center;border-top:1px solid #ddd;padding-top:8px;">
+                               align-items:center;border-top:1px solid #ddd;padding-top:8px;margin-top:8px;">
                     <button id="prev-btn" style="background:#007cbf;color:white;border:none;
                       padding:4px 12px;border-radius:4px;cursor:pointer;font-size:14px;">← Prev</button>
                     <span style="font-size:12px;color:#666;">${index + 1} of ${total}</span>
@@ -243,14 +248,22 @@ const MapBoxMiami = () => {
         `;
       };
 
+      // Close any existing popup first
+      if (activePopupRef.current) {
+        activePopupRef.current.remove();
+        activePopupRef.current = null;
+      }
+
       const popup = new mapboxgl.Popup({
         offset: [0, -15],
         closeButton: true,
-        closeOnClick: true,
+        closeOnClick: false,
       })
         .setLngLat(coords)
         .setHTML(renderPopup(currentIndex))
         .addTo(map);
+
+      activePopupRef.current = popup;
 
       if (featuresAtLocation.length > 1) {
         const addListeners = () => {
@@ -274,12 +287,27 @@ const MapBoxMiami = () => {
         addListeners();
       }
     });
-return () => {
-  document.removeEventListener("click", handleOutsideClick, true);
-  container?.removeEventListener("click", handlePopupImageClick, true); // ✅ use local var
-  if (map.__refreshInterval) clearInterval(map.__refreshInterval);
-  map.remove();
-};
+
+    // 7. Close popup on outside click
+    const handleOutsideClick = (e) => {
+      if (
+        activePopupRef.current &&
+        !e.target.closest(".mapboxgl-popup") &&
+        !e.target.closest(".mapboxgl-canvas")
+      ) {
+        activePopupRef.current.remove();
+        activePopupRef.current = null;
+      }
+    };
+    document.addEventListener("click", handleOutsideClick, true);
+
+    // 8. Cleanup
+    return () => {
+      document.removeEventListener("click", handleOutsideClick, true);
+      container?.removeEventListener("click", handlePopupImageClick, true);
+      if (map.__refreshInterval) clearInterval(map.__refreshInterval);
+      map.remove();
+    };
   }, []);
 
   return (
