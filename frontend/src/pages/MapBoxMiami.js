@@ -149,14 +149,15 @@ const MapBoxMiami = () => {
     const map = mapRef.current;
 
     // ✅ Delegate clicks on popup images up to the map container
-    const handlePopupImageClick = (e) => {
-      if (e.target.tagName === "IMG" && e.target.closest(".mapboxgl-popup")) {
-        setModalImage({
-          url: e.target.src,
-          name: e.target.alt || "",
-        });
-      }
-    };
+ const handlePopupImageClick = (e) => {
+  if (e.target.tagName === "IMG" && e.target.closest(".mapboxgl-popup")) {
+    e.stopPropagation(); // ✅ prevents map click from also firing
+    setModalImage({
+      url: e.target.src,
+      name: e.target.alt || "",
+    });
+  }
+};
     mapContainer.current.addEventListener("click", handlePopupImageClick);
 
     map.on("load", async () => {
@@ -193,6 +194,8 @@ const MapBoxMiami = () => {
     });
 
     map.on("click", (event) => {
+        // ✅ Ignore clicks that originated inside the popup
+  if (event.originalEvent.target.closest?.(".mapboxgl-popup")) return;
       const features = map.queryRenderedFeatures(event.point, {
         layers: ["csvData"],
       });
