@@ -245,7 +245,7 @@ const MapBoxMiami = () => {
       const popup = new mapboxgl.Popup({
         offset: [0, -15],
         closeButton: true,
-        closeOnClick: false,
+        closeOnClick: true,
       })
         .setLngLat(coords)
         .setHTML(renderPopup(currentIndex))
