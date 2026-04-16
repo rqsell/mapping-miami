@@ -1,0 +1,27 @@
+{
+  "short_name": "Mapping Miami",
+  "name": "Mapping Miami - Interactive Map & Data Explorer",
+  "description": "An interactive map and data explorer for Miami.",
+  "start_url": ".",
+  "display": "browser",
+  "theme_color": "#c6bb99",
+  "background_color": "#c6bb99",
+  "orientation": "any",
+  "icons": [
+    {
+      "src": "favicon-bpc.ico",
+      "sizes": "64x64 32x32 24x24 16x16",
+      "type": "image/x-icon"
+    },
+    {
+      "src": "favicon-bpc.ico",
+      "type": "image/png",
+      "sizes": "192x192"
+    },
+    {
+      "src": "favicon-bpc.ico",
+      "type": "image/png",
+      "sizes": "512x512"
+    }
+  ]
+}
