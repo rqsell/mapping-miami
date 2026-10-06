@@ -186,7 +186,7 @@ const MapBoxMiami = () => {
             "Bass Museum Pilot (2023)",           "#F2E37E",
             "Photo Walk 05/15/26", "#BCE887",
             "Book Odes 05/02/26", "#C578D6",
-            "O, Miami 04/09/26", "yellow",
+            "O, Miami 04/09/26", "#FE5733",
             "#cccccc",
           ],
         },
